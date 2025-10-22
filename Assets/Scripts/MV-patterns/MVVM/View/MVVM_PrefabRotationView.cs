@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MVVM_PrefabRotationView : MVVM_RotationView
@@ -8,7 +9,9 @@ public class MVVM_PrefabRotationView : MVVM_RotationView
     public MVVM_PrefabRotationView(GameObject prefab, RotateButton[] rotateButtons, MVVM_RotationViewModel viewModel) : base(viewModel)
     {
         if (prefab)
-            _prefabTransform = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity).transform;
+            _prefabTransform = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity).transform;
+        else
+            throw new ArgumentNullException($"Prefab is not assigned in {nameof(MVVM_PrefabRotationView)}");
 
         _rotateButtons = rotateButtons;
         foreach (var button in _rotateButtons)
@@ -17,13 +20,14 @@ public class MVVM_PrefabRotationView : MVVM_RotationView
         }
     }
 
-    public override void Clear()
+    public override void Dispose()
     {
+        base.Dispose();
         foreach (var button in _rotateButtons)
         {
             button.OnRotate -= _viewModel.Rotate;
         }
-        Object.Destroy(_prefabTransform.gameObject);
+        GameObject.Destroy(_prefabTransform.gameObject);
     }
 
     public override void SetRotation(Quaternion rotation)

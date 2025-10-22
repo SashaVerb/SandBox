@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MVP_PrefabRotationView : MVP_RotationView
@@ -9,6 +10,8 @@ public class MVP_PrefabRotationView : MVP_RotationView
     {
         if (prefab)
             _prefabTransform = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity).transform;
+        else
+            throw new ArgumentNullException($"Prefab is not assigned in {nameof(MVP_PrefabRotationView)}");
 
         _rotateButtons = rotateButtons;
         foreach (var button in _rotateButtons)

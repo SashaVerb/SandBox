@@ -8,17 +8,18 @@ public class MVVM_Bootstrap : MonoBehaviour, IBootstrap
 
     private MVVM_PrefabRotationView _view;
     private MVVM_RotationWithSpeedModel _model;
-    private MVVM_RotationViewModel _presenter;
+    private MVVM_RotationViewModel _viewModel;
 
     public void Init()
     {
         _model = new MVVM_RotationWithSpeedModel(_speed);
-        _presenter = new MVVM_FreeRotationViewModel(_model);
-        _view = new MVVM_PrefabRotationView(_prefab, buttons, _presenter);
+        _viewModel = new MVVM_FreeRotationViewModel(_model);
+        _view = new MVVM_PrefabRotationView(_prefab, buttons, _viewModel);
     }
 
     public void Dispose()
     {
-        _view.Clear();
+        _view.Dispose();
+        _viewModel.Dispose();
     }
 }
