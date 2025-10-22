@@ -19,6 +19,7 @@ public class PatternSwitch : MonoBehaviour
     [Header("Bootstraps")]
     [SerializeField] private MVC_Bootstrap _mvc;
     [SerializeField] private MVP_Bootstrap _mvp;
+    [SerializeField] private MVVM_Bootstrap _mvvm;
 
     private IBootstrap _currentBootstrap;
 
@@ -28,7 +29,8 @@ public class PatternSwitch : MonoBehaviour
     {
         _bootstraps = new Dictionary<string, IBootstrap> {
             { "MVC", _mvc },
-            { "MVP", _mvp }
+            { "MVP", _mvp },
+            { "MVVM", _mvvm }
         };
         _options = _bootstraps.Keys.ToList();
 

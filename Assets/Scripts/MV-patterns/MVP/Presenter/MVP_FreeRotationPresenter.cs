@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class MVP_FreeRotationController : MVP_RotationPresenter
+public class MVP_FreeRotationPresenter : MVP_RotationPresenter
 {
-    public MVP_FreeRotationController(MVP_RotationModel model) : base(model)
+    public MVP_FreeRotationPresenter(MVP_RotationModel model) : base(model)
     {
     }
 

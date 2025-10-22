@@ -13,7 +13,7 @@ public class MVP_Bootstrap : MonoBehaviour, IBootstrap
     public void Init()
     {
         _model = new MVP_RotationWithSpeedModel(_speed);
-        _presenter = new MVP_FreeRotationController(_model);
+        _presenter = new MVP_FreeRotationPresenter(_model);
         _view = new MVP_PrefabRotationView(_prefab, buttons, _presenter);
         _model.Init(_view);
     }
