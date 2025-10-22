@@ -1,7 +1,6 @@
-using UnityEngine;
+using System;
 
-public interface IBootstrap
+public interface IBootstrap : IDisposable
 {
     void Init();
-    void Dispose();
 }
