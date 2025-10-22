@@ -17,7 +17,8 @@ public class PatternSwitch : MonoBehaviour
     [SerializeField] private GameObject _rotateButtons;
     [Space]
     [Header("Bootstraps")]
-    [SerializeField] private MVCBootstrap _mvc;
+    [SerializeField] private MVC_Bootstrap _mvc;
+    [SerializeField] private MVP_Bootstrap _mvp;
 
     private IBootstrap _currentBootstrap;
 
@@ -26,7 +27,8 @@ public class PatternSwitch : MonoBehaviour
     private void Awake()
     {
         _bootstraps = new Dictionary<string, IBootstrap> {
-            { "MVC", _mvc }
+            { "MVC", _mvc },
+            { "MVP", _mvp }
         };
         _options = _bootstraps.Keys.ToList();
 
