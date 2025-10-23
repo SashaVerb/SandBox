@@ -1,16 +1,33 @@
+using R3;
 using UnityEngine;
 
-public abstract class MVC_RotationController
+public class MVC_RotationController : MVC_IRotationController
 {
-    protected MVC_RotationView _view;
-    protected MVC_RotationModel _model;
+    private readonly MVC_IRotationView _view;
+    private readonly MVC_IRotationModel _model;
 
-    public MVC_RotationController(MVC_RotationView view, MVC_RotationModel model)
+    private CompositeDisposable _disposables = new();
+
+    public MVC_RotationController(MVC_IRotationView view, MVC_IRotationModel model)
     {
         _view = view;
         _model = model;
+
+        _model.Rotation.Subscribe(_view.SetRotation).AddTo(_disposables);
     }
 
-    public abstract void Rotate(Vector3 axis);
-    public abstract void SetRotation(Quaternion rotation);
+    public void Dispose()
+    {
+        _disposables.Dispose();
+    }
+
+    public void Rotate(Vector3 axis)
+    {
+        _model.Rotate(axis);
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        _model.Rotation.Value = rotation;
+    }
 }

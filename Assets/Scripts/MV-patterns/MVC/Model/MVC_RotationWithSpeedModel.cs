@@ -1,23 +1,26 @@
+using R3;
 using UnityEngine;
 
-public class MVC_RotationWithSpeedModel : MVC_RotationModel
+public class MVC_RotationWithSpeedModel : MVC_IRotationModel
 {
     public float Speed { get; set; }
 
-    public MVC_RotationWithSpeedModel(MVC_RotationView view, float speed = 1f) : base(view)
+    public ReactiveProperty<Quaternion> Rotation => new(Quaternion.identity);
+
+    public MVC_RotationWithSpeedModel(float speed = 1f)
     {
         Speed = speed;
     }
 
-    public override void Rotate(Vector3 axis)
+    public void Rotate(Vector3 axis)
     {
         Quaternion scaledRotation = Quaternion.AngleAxis(Speed * Time.deltaTime, axis);
 
-        Rotation *= scaledRotation;
+        Rotation.Value *= scaledRotation;
     }
 
-    public override void SetRotation(Quaternion rotation)
+    public void SetRotation(Quaternion rotation)
     {
-        Rotation = rotation;
+        Rotation.Value = rotation;
     }
 }

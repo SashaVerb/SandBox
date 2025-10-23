@@ -2,21 +2,25 @@ using UnityEngine;
 
 public class MVC_Bootstrap : MonoBehaviour, IBootstrap
 {
-    [SerializeField] private RotateButton[] buttons;
+    [SerializeField] private RotateButton[] _buttons;
     [SerializeField] private float _speed;
     [SerializeField] private GameObject _prefab;
 
-    private MVC_PrefabRotationView _view;
-    private MVC_RotationWithSpeedModel _model;
-    private MVC_RotationController _controller;
+    private MVC_IRotationView _view;
+    private MVC_IRotationModel _model;
+    private MVC_IRotationController _controller;
+
+    private GameObject _rotateObject;
 
     public void Init()
     {
-        _view = new MVC_PrefabRotationView(_prefab);
-        _model = new MVC_RotationWithSpeedModel(_view, _speed);
-        _controller = new MVC_FreeRotationController(_view, _model);
+        _rotateObject = Instantiate(_prefab);
 
-        foreach (var button in buttons)
+        _view = new MVC_TransformRotationView(_rotateObject.transform);
+        _model = new MVC_RotationWithSpeedModel(_speed);
+        _controller = new MVC_RotationController(_view, _model);
+
+        foreach (var button in _buttons)
         {
             button.OnRotate += Rotate;
         }
@@ -24,12 +28,14 @@ public class MVC_Bootstrap : MonoBehaviour, IBootstrap
 
     public void Dispose()
     {
-        _view.Clear();
+        _controller.Dispose();
 
-        foreach (var button in buttons)
+        foreach (var button in _buttons)
         {
             button.OnRotate -= Rotate;
         }
+
+        Destroy(_rotateObject);
     }
 
     private void Rotate(Vector3 vector)
