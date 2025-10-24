@@ -6,7 +6,7 @@ public class MVVM_RotationViewModel : MVVM_IRotationViewModel
     private MVVM_IRotationModel _model;
     private CompositeDisposable _disposables = new();
 
-    public ReactiveProperty<Quaternion> RotationView => new(Quaternion.identity);
+    public ReactiveProperty<Quaternion> RotationView { get; } = new(Quaternion.identity);
 
     public MVVM_RotationViewModel(MVVM_IRotationModel model)
     {

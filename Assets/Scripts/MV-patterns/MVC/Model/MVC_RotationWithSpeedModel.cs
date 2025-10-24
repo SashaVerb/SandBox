@@ -5,7 +5,7 @@ public class MVC_RotationWithSpeedModel : MVC_IRotationModel
 {
     public float Speed { get; set; }
 
-    public ReactiveProperty<Quaternion> Rotation => new(Quaternion.identity);
+    public ReactiveProperty<Quaternion> Rotation { get; } = new(Quaternion.identity);
 
     public MVC_RotationWithSpeedModel(float speed = 1f)
     {

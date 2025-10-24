@@ -5,7 +5,7 @@ public class MVP_RotationWithSpeedModel : MVP_IRotationModel
 {
     public float Speed { get; set; }
 
-    public ReactiveProperty<Quaternion> Rotation => new(Quaternion.identity);
+    public ReactiveProperty<Quaternion> Rotation { get; } = new(Quaternion.identity);
 
     public MVP_RotationWithSpeedModel(float speed = 1f)
     {

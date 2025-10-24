@@ -13,7 +13,7 @@ public class MVP_TransformRotationView : MVP_IRotationView
         _rotateButtons = rotateButtons;
         foreach (var button in _rotateButtons)
         {
-            button.OnRotate += OnRotate;
+            button.OnRotate += HandleButtonRotate;
         }
     }
 
@@ -32,5 +32,10 @@ public class MVP_TransformRotationView : MVP_IRotationView
     public void SetRotation(Quaternion rotation)
     {
         _transform.rotation = rotation;
+    }
+
+    private void HandleButtonRotate(Vector3 vector)
+    {
+        OnRotate?.Invoke(vector);
     }
 }

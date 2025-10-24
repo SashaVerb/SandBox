@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class MVP_RotationPresenter : MVP_IRotationPresenter
 {
-    private MVP_IRotationModel _model;
-    private MVP_IRotationView _view;
+    private readonly MVP_IRotationModel _model;
+    private readonly MVP_IRotationView _view;
 
-    private CompositeDisposable _disposables = new();
+    private readonly CompositeDisposable _disposables = new();
 
     public MVP_RotationPresenter(MVP_IRotationModel model, MVP_IRotationView view)
     {
@@ -14,6 +14,8 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
         _view = view;
 
         _model.Rotation.Subscribe(_view.SetRotation).AddTo(_disposables);
+
+        _view.OnRotate += Rotate;
     }
 
     public void Rotate(Vector3 axis)
@@ -29,5 +31,7 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
     public void Dispose()
     {
         _disposables.Dispose();
+
+        _view.OnRotate -= Rotate;
     }
 }
