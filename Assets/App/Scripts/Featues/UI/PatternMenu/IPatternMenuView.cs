@@ -1,9 +1,6 @@
 using System;
-using UnityEngine;
 
-public interface IPatternMenuView : ISwitchable
+public interface IPatternMenuView : IRotationMenu, ISwitchable
 {
-    event Action<Vector3> OnRotate;
-
     event Action OnGoBack;
 }

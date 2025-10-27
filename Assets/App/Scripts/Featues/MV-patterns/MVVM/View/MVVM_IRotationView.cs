@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public interface MVVM_IRotationView : IDisposable
+public interface MVVM_IRotationView : ISubscriable
 {
     void SetRotation(Quaternion rotation);
 }

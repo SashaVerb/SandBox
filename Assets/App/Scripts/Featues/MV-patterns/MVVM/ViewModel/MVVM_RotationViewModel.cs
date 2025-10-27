@@ -6,18 +6,12 @@ public class MVVM_RotationViewModel : MVVM_IRotationViewModel
     private MVVM_IRotationModel _model;
     private CompositeDisposable _disposables = new();
 
-    public ReactiveProperty<Quaternion> RotationView { get; } = new(Quaternion.identity);
+    public ReactiveProperty<Quaternion> RotationView { get; }
 
     public MVVM_RotationViewModel(MVVM_IRotationModel model)
     {
         _model = model;
-
-        _model.Rotation.Subscribe(OnRotationChange).AddTo(_disposables);
-    }
-
-    private void OnRotationChange(Quaternion quaternion)
-    {
-        RotationView.Value = quaternion;
+        RotationView = new(model.Rotation.Value);
     }
 
     public void Rotate(Vector3 axis)
@@ -30,8 +24,18 @@ public class MVVM_RotationViewModel : MVVM_IRotationViewModel
         _model.Rotation.Value = rotation;
     }
 
-    public void Dispose()
+    public void Subscribe()
     {
-        _disposables.Dispose();
+        _model.Rotation.Subscribe(OnRotationChange).AddTo(_disposables);
+    }
+
+    public void Unsubscribe()
+    {
+        _disposables.Clear();
+    }
+
+    private void OnRotationChange(Quaternion quaternion)
+    {
+        RotationView.Value = quaternion;
     }
 }

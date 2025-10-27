@@ -1,4 +1,5 @@
 using R3;
+using System;
 using UnityEngine;
 
 public class MVP_RotationPresenter : MVP_IRotationPresenter
@@ -12,10 +13,6 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
     {
         _model = model;
         _view = view;
-
-        _model.Rotation.Subscribe(_view.SetRotation).AddTo(_disposables);
-
-        _view.OnRotate += Rotate;
     }
 
     public void Rotate(Vector3 axis)
@@ -28,9 +25,21 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
         _model.Rotation.Value = rotation;
     }
 
-    public void Dispose()
+    public void Subscribe()
     {
-        _disposables.Dispose();
+        _model.Rotation.Subscribe(Test).AddTo(_disposables);
+
+        _view.OnRotate += Rotate;
+    }
+
+    private void Test(Quaternion quaternion)
+    {
+        _view.SetRotation(quaternion);
+    }
+
+    public void Unsubscribe()
+    {
+        _disposables.Clear();
 
         _view.OnRotate -= Rotate;
     }

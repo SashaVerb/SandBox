@@ -6,6 +6,11 @@ public class SwitchMachine<TKey, TValue> where TValue : ISwitchable
     public TValue CurrentValue { get; private set; }
     public TKey CurrentKey { get; private set; }
 
+    public SwitchMachine(Dictionary<TKey, TValue> dictionary)
+    {
+        _dictionary = dictionary;
+    }
+
     public SwitchMachine(params (TKey key, TValue value)[] pairs)
     {
         _dictionary = new Dictionary<TKey, TValue>();
@@ -15,7 +20,7 @@ public class SwitchMachine<TKey, TValue> where TValue : ISwitchable
 
     public void SwitchTo(TKey key)
     {
-        if (CurrentKey.Equals(key))
+        if (CurrentKey != null && CurrentKey.Equals(key))
             return;
 
         if (!_dictionary.TryGetValue(key, out var newSwitch))

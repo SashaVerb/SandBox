@@ -7,56 +7,65 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private PatternMenuView _patternMenuView;
     [SerializeField] private PatternSwitchMenuView _patternSwitchMenuView;
     [Space]
-    [Header("Patterns")]
-    [SerializeField] private MVC_Bootstrap _mvc;
-    [SerializeField] private MVP_Bootstrap _mvp;
-    [SerializeField] private MVVM_Bootstrap _mvvm;
+    [SerializeField] private float _speed;
 
-    private ISwitchable _currentBootstrap;
+    private Dictionary<string, ISwitchable> _patternsDictionary;
 
-    private Dictionary<string, ISwitchable> _bootstraps;
+    private SwitchMachine<string, ISwitchable> _patternsSwitcher;
 
     private GenericSwitchMachine<ISwitchable> _viewSwitcher;
 
     private void Awake()
     {
-        _bootstraps = new Dictionary<string, ISwitchable> {
-            { "MVC", _mvc },
-            { "MVP", _mvp },
-            { "MVVM", _mvvm }
+        SetPatterns();
+        Subscribe();
+        SetUIViews();
+    }
+
+    private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void SetPatterns()
+    {
+        _patternsDictionary = new Dictionary<string, ISwitchable> {
+            { "MVC", new MVC_Switcher(_patternMenuView, _speed) },
+            { "MVP", new MVP_Switcher(_patternMenuView, _speed) },
+            { "MVVM", new MVVM_Switcher(_patternMenuView, _speed) }
         };
 
+        _patternsSwitcher = new(_patternsDictionary);
+        _patternSwitchMenuView.SetOptions(_patternsDictionary.Keys.ToList());
+    }
 
-        _patternSwitchMenuView.SetOptions(_bootstraps.Keys.ToList());
+    private void Subscribe()
+    {
         _patternSwitchMenuView.OnChoosePattern += OnActivatePattern;
-        
         _patternMenuView.OnGoBack += OnGoBack;
-        _viewSwitcher = new(_patternMenuView, _patternSwitchMenuView);
+    }
 
+    private void Unsubscribe()
+    {
+        _patternSwitchMenuView.OnChoosePattern -= OnActivatePattern;
+        _patternMenuView.OnGoBack -= OnGoBack;
+    }
+
+    private void SetUIViews()
+    {
+        _viewSwitcher = new(_patternMenuView, _patternSwitchMenuView);
         _viewSwitcher.SwitchTo<PatternSwitchMenuView>();
     }
 
     private void OnActivatePattern(string pattern)
     {
-        if (_bootstraps.TryGetValue(pattern, out var bootstrap))
-        {
-            _currentBootstrap = bootstrap;
-        }
-        else
-        {
-            Debug.LogError($"No such option: {pattern}");
-            return;
-        }
-
+        _patternsSwitcher.SwitchTo(pattern);
         _viewSwitcher.SwitchTo<PatternMenuView>();
-
-        _currentBootstrap.Activate();
     }
 
     private void OnGoBack()
     {
         _viewSwitcher.SwitchTo<PatternSwitchMenuView>();
-
-        _currentBootstrap.Deactivate();
+        _patternsSwitcher.DeactivateCurrent();
     }
 }
