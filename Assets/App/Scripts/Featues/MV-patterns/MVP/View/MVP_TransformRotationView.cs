@@ -3,35 +3,28 @@ using UnityEngine;
 
 public class MVP_TransformRotationView : MVP_IRotationView
 {
-    private Transform _transform;
-    private RotateButton[] _rotateButtons;
+    private IRotationMenu _rotationMenu;
 
-    public MVP_TransformRotationView(Transform transform, RotateButton[] rotateButtons)
+    public MVP_TransformRotationView(IRotationMenu rotationMenu)
     {
-        _transform = transform;
-
-        _rotateButtons = rotateButtons;
-        foreach (var button in _rotateButtons)
-        {
-            button.OnRotate += HandleButtonRotate;
-        }
+        _rotationMenu = rotationMenu;
     }
 
     public event Action<Vector3> OnRotate;
 
-    public void Dispose()
-    {
-        foreach (var button in _rotateButtons)
-        {
-            button.OnRotate -= OnRotate;
-        }
-
-        GameObject.Destroy(_transform.gameObject);
-    }
-
     public void SetRotation(Quaternion rotation)
     {
-        _transform.rotation = rotation;
+        _rotationMenu.RotateObject.rotation = rotation;
+    }
+
+    public void Subscribe()
+    {
+        _rotationMenu.OnRotateRequested += HandleButtonRotate;
+    }
+
+    public void Unsubscribe()
+    {
+        _rotationMenu.OnRotateRequested -= HandleButtonRotate;
     }
 
     private void HandleButtonRotate(Vector3 vector)

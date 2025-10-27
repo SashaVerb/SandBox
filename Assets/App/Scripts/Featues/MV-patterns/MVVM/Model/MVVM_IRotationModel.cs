@@ -5,5 +5,7 @@ public interface MVVM_IRotationModel
 {
     public ReactiveProperty<Quaternion> Rotation { get; }
 
-    public abstract void Rotate(Vector3 axis);
+    void Rotate(Vector3 axis);
+
+    void SetRotation(Quaternion rotation);
 }

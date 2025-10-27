@@ -13,6 +13,7 @@ public class GenericSwitchMachine<TValue> where TValue : ISwitchable
         foreach (var sw in switches)
         {
             _dictionary[sw.GetType()] = sw;
+            sw.Deactivate();
         }
     }
 

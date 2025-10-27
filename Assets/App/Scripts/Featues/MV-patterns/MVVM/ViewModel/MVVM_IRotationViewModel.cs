@@ -1,8 +1,7 @@
 using R3;
-using System;
 using UnityEngine;
 
-public interface MVVM_IRotationViewModel : IDisposable
+public interface MVVM_IRotationViewModel : ISubscribable
 {
     public ReactiveProperty<Quaternion> RotationView { get; }
 

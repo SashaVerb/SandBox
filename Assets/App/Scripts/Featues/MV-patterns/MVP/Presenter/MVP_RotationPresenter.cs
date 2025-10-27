@@ -12,10 +12,6 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
     {
         _model = model;
         _view = view;
-
-        _model.Rotation.Subscribe(_view.SetRotation).AddTo(_disposables);
-
-        _view.OnRotate += Rotate;
     }
 
     public void Rotate(Vector3 axis)
@@ -25,12 +21,19 @@ public class MVP_RotationPresenter : MVP_IRotationPresenter
 
     public void SetRotation(Quaternion rotation)
     {
-        _model.Rotation.Value = rotation;
+        _model.SetRotation(rotation);
     }
 
-    public void Dispose()
+    public void Subscribe()
     {
-        _disposables.Dispose();
+        _model.Rotation.Subscribe(_view.SetRotation).AddTo(_disposables);
+
+        _view.OnRotate += Rotate;
+    }
+
+    public void Unsubscribe()
+    {
+        _disposables.Clear();
 
         _view.OnRotate -= Rotate;
     }

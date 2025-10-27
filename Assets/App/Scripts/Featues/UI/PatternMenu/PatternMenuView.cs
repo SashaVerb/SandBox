@@ -6,8 +6,11 @@ public class PatternMenuView : SwitchableUIView, IPatternMenuView
 {
     [SerializeField] private Button _backButton;
     [SerializeField] private RotateButton[] _rotateButtons;
+    [SerializeField] private GameObject _rotateObject;
 
-    public event Action<Vector3> OnRotate;
+    public Transform RotateObject => _rotateObject.transform;
+
+    public event Action<Vector3> OnRotateRequested;
     public event Action OnGoBack;
 
     private void OnEnable()
@@ -37,6 +40,18 @@ public class PatternMenuView : SwitchableUIView, IPatternMenuView
 
     private void HandleOnRotate(Vector3 axis)
     {
-        OnRotate?.Invoke(axis);
+        OnRotateRequested?.Invoke(axis);
+    }
+
+    public override void Activate()
+    {
+        _rotateObject.SetActive(true);
+        base.Activate();
+    }
+
+    public override void Deactivate()
+    {
+        _rotateObject.SetActive(false);
+        base.Deactivate();
     }
 }
